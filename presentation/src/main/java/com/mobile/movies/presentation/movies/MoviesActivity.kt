@@ -50,7 +50,6 @@ class MoviesActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        moviesList.clear()
         moviesViewModel.moviesLiveData.observeApi(this, { response ->
             when (response.responseType) {
                 Status.ERROR -> {
