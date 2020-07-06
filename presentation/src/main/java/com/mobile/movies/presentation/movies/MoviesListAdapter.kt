@@ -17,11 +17,13 @@ import kotlinx.android.synthetic.main.movies_item.view.*
 import java.util.*
 
 
-class MoviesListAdapter : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolder>(), Filterable {
+class MoviesListAdapter(private var movies: MutableList<MoviesItem>) : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolder>(), Filterable {
 
-    var movies = mutableListOf<MoviesItem>()
     var moviesFilter = mutableListOf<MoviesItem>()
 
+    init {
+        moviesFilter = movies
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
 
         val view =

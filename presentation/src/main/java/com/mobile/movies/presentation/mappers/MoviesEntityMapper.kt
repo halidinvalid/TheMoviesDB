@@ -19,6 +19,6 @@ class MoviesEntityMapper : Mapper<MoviesEntity, Movies>() {
                 it.release_date,
                 it.poster_path
             )
-        }
+        } as MutableList<MoviesItem>
     )
 }

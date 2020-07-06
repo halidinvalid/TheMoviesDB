@@ -21,13 +21,13 @@ class MoviesActivity : AppCompatActivity() {
     private lateinit var layoutManager: GridLayoutManager
     private var loadingPage = 1
 
+    private var moviesList = mutableListOf<MoviesItem>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
-        listAdapter = MoviesListAdapter()
         layoutManager = GridLayoutManager(this, 2)
         recyclerViewMovies.layoutManager = layoutManager
-        recyclerViewMovies.adapter = listAdapter
         moviesViewModel.getMovies(loadingPage)
 
         buttonLoadMore.setOnClickListener {
@@ -50,6 +50,7 @@ class MoviesActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        moviesList.clear()
         moviesViewModel.moviesLiveData.observeApi(this, { response ->
             when (response.responseType) {
                 Status.ERROR -> {
@@ -61,7 +62,9 @@ class MoviesActivity : AppCompatActivity() {
                 Status.SUCCESSFUL -> {
                     response.data.let { data ->
                         if (data != null) {
-                            listAdapter.updateList(data.results)
+                            moviesList.addAll(data.results)
+                            listAdapter = MoviesListAdapter(moviesList)
+                            recyclerViewMovies.adapter = listAdapter
                         }
                     }
                 }
