@@ -1,18 +1,14 @@
 package com.mobile.movies.presentation.movies
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.mobile.movies.domain.interactor.GetMoviesInteractor
 import com.mobile.movies.domain.model.MoviesData
 import com.mobile.movies.presentation.common.BaseViewModel
 import com.mobile.movies.presentation.entities.DataHolder
 import com.mobile.movies.presentation.entities.Error
 import com.mobile.movies.presentation.entities.Status
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.mobile.movies.presentation.extension.launchViewModelScope
 
 class MoviesViewModel(
     private val getMoviesInteractor: GetMoviesInteractor
@@ -25,21 +21,22 @@ class MoviesViewModel(
     fun getMovies(
         page: Int
     ) {
-        viewModelScope.launch {
-            try {
-                val response = withContext(Dispatchers.Default) {
-                    getMoviesInteractor.getMovies(
-                        page
+        _moviesLiveData.postValue(DataHolder(responseType = Status.LOADING))
+        launchViewModelScope {
+            getMoviesInteractor.getMovies(
+                page
+            ).apply {
+                if (isSuccessful)
+                    _moviesLiveData.postValue(
+                        DataHolder(responseType = Status.SUCCESSFUL, data = this.body())
                     )
-                }.body()
-
-                _moviesLiveData.value =
-                    DataHolder(responseType = Status.SUCCESSFUL, data = response)
-
-            } catch (exception: Exception) {
-                _moviesLiveData.value =
-                    DataHolder(responseType = Status.ERROR, error = Error(exception.message))
-                Log.e("TAG", exception.message)
+                else
+                    _moviesLiveData.postValue(
+                        DataHolder(
+                            responseType = Status.ERROR,
+                            error = Error("invalid response")
+                        )
+                    )
             }
         }
     }
