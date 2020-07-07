@@ -89,6 +89,8 @@ class MoviesListAdapter : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolde
 
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val charSearch = constraint.toString()
+                moviesListOld.clear()
+                moviesListOld.addAll(moviesList)
                 moviesFilter = if (charSearch.isEmpty()) {
                     moviesListOld
                 } else {
