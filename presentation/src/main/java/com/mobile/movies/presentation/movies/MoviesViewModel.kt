@@ -6,9 +6,9 @@ import com.mobile.movies.domain.interactor.GetMoviesInteractor
 import com.mobile.movies.domain.model.MoviesData
 import com.mobile.movies.presentation.common.BaseViewModel
 import com.mobile.movies.presentation.entities.DataHolder
-import com.mobile.movies.presentation.entities.Error
-import com.mobile.movies.presentation.entities.Status
 import com.mobile.movies.presentation.extension.launchViewModelScope
+import com.mobile.movies.presentation.extension.loadingData
+import com.mobile.movies.presentation.extension.responseData
 
 class MoviesViewModel(
     private val getMoviesInteractor: GetMoviesInteractor
@@ -20,25 +20,14 @@ class MoviesViewModel(
 
     fun getMovies(
         page: Int
-    ) {
-        _moviesLiveData.postValue(DataHolder(responseType = Status.LOADING))
-        launchViewModelScope {
-            getMoviesInteractor.getMovies(
-                page
-            ).apply {
-                if (isSuccessful)
-                    _moviesLiveData.postValue(
-                        DataHolder(responseType = Status.SUCCESSFUL, data = this.body())
-                    )
-                else
-                    _moviesLiveData.postValue(
-                        DataHolder(
-                            responseType = Status.ERROR,
-                            error = Error("invalid response")
-                        )
-                    )
-            }
-        }
+    ) = launchViewModelScope {
+        _moviesLiveData
+            .loadingData()
+            .responseData(
+                getMoviesInteractor.getMovies(
+                    page
+                )
+            )
     }
 
     companion object {

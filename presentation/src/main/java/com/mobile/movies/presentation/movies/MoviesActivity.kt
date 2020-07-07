@@ -37,7 +37,7 @@ class MoviesActivity : AppCompatActivity() {
                 Toast.makeText(this, "Loading", Toast.LENGTH_LONG).show()
             },
             fail = { error ->
-                Toast.makeText(this, error.toString(), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, error, Toast.LENGTH_LONG).show()
             },
             success = { moviesData ->
                 listAdapter.updateList(moviesData?.results!!)
