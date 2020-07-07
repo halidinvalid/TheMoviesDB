@@ -42,13 +42,9 @@ class MoviesListAdapter : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolde
 
     fun updateList(list: MutableList<MoviesItemData>) {
         moviesList.addAll(list)
-
-        val diffResult: DiffUtil.DiffResult =
-            DiffUtil.calculateDiff(MyDiffCallback(moviesListOld, moviesList))
         moviesListOld.clear()
         moviesListOld.addAll(moviesList)
-        diffResult.dispatchUpdatesTo(this@MoviesListAdapter)
-
+        notifyDataSetChanged()
     }
 
     class MoviesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -88,9 +84,9 @@ class MoviesListAdapter : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolde
         return object : Filter() {
 
             override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val charSearch = constraint.toString()
                 moviesListOld.clear()
                 moviesListOld.addAll(moviesList)
+                val charSearch = constraint.toString()
                 moviesFilter = if (charSearch.isEmpty()) {
                     moviesListOld
                 } else {
@@ -120,11 +116,9 @@ class MoviesListAdapter : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolde
                     moviesListOld.addAll(moviesFilter)
                     diffResult.dispatchUpdatesTo(this@MoviesListAdapter)
                 } else {
-                    val diffResult: DiffUtil.DiffResult =
-                        DiffUtil.calculateDiff(MyDiffCallback(moviesListOld, moviesList))
                     moviesListOld.clear()
                     moviesListOld.addAll(moviesList)
-                    diffResult.dispatchUpdatesTo(this@MoviesListAdapter)
+                    notifyDataSetChanged()
                 }
             }
 
