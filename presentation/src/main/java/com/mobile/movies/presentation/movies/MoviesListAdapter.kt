@@ -8,22 +8,20 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
+import com.mobile.movies.domain.entities.MoviesItemData
 import com.mobile.movies.presentation.R
 import com.mobile.movies.presentation.di.IMAGE_URL
-import com.mobile.movies.presentation.entities.MoviesItem
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.movies_item.view.*
 import java.util.*
 
 
-class MoviesListAdapter(private var movies: MutableList<MoviesItem>) : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolder>(), Filterable {
+class MoviesListAdapter : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolder>(), Filterable {
 
-    var moviesFilter = mutableListOf<MoviesItem>()
+    var movies = mutableListOf<MoviesItemData>()
+    var moviesFilter = mutableListOf<MoviesItemData>()
 
-    init {
-        moviesFilter = movies
-    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
 
         val view =
@@ -40,7 +38,7 @@ class MoviesListAdapter(private var movies: MutableList<MoviesItem>) : RecyclerV
         holder.bind(moviesFilter[position])
     }
 
-    fun updateList(list: List<MoviesItem>) {
+    fun updateList(list: List<MoviesItemData>) {
         movies.addAll(list)
         moviesFilter.addAll(list)
         notifyDataSetChanged()
@@ -48,7 +46,7 @@ class MoviesListAdapter(private var movies: MutableList<MoviesItem>) : RecyclerV
 
     class MoviesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(moviesItem: MoviesItem) {
+        fun bind(moviesItem: MoviesItemData) {
             with(itemView) {
                 textViewTitle.text = moviesItem.title
                 Picasso.with(context)
@@ -87,10 +85,10 @@ class MoviesListAdapter(private var movies: MutableList<MoviesItem>) : RecyclerV
                 moviesFilter = if (charSearch.isEmpty()) {
                     movies
                 } else {
-                    val resultList = mutableListOf<MoviesItem>()
+                    val resultList = mutableListOf<MoviesItemData>()
                     for (row in movies) {
-                        if (row.title.toLowerCase(Locale.ROOT)
-                                .contains(charSearch.toLowerCase(Locale.ROOT))
+                        if (row.title?.toLowerCase(Locale.ROOT)
+                                ?.contains(charSearch.toLowerCase(Locale.ROOT))!!
                         ) {
                             resultList.add(row)
                         }
@@ -105,7 +103,7 @@ class MoviesListAdapter(private var movies: MutableList<MoviesItem>) : RecyclerV
 
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                moviesFilter = results?.values as MutableList<MoviesItem>
+                moviesFilter = results?.values as MutableList<MoviesItemData>
                 notifyDataSetChanged()
             }
 

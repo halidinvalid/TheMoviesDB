@@ -1,11 +1,13 @@
 package com.mobile.movies.domain.repositories
 
-import com.mobile.movies.domain.entities.MoviesEntity
-import io.reactivex.Flowable
+import com.mobile.movies.domain.entities.MoviesData
+import kotlinx.coroutines.Deferred
+import retrofit2.Call
+import retrofit2.Response
 
 interface MoviesRepository {
 
-    fun getMovies(
+   suspend fun getMovies(
         page: Int
-    ): Flowable<MoviesEntity>
+    ): Response<MoviesData>
 }

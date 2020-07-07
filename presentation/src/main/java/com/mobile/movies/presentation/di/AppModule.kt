@@ -1,11 +1,10 @@
 package com.mobile.movies.presentation.di
 
-import com.mobile.movies.data.services.MoviesServices
 import com.mobile.movies.data.repository.MoviesRepositoryImpl
-import com.mobile.movies.domain.repositories.MoviesRepository
+import com.mobile.movies.data.services.MoviesServices
 import com.mobile.movies.domain.interactor.GetMoviesInteractor
+import com.mobile.movies.domain.repositories.MoviesRepository
 import com.mobile.movies.presentation.common.AsyncFlowableTransformer
-import com.mobile.movies.presentation.mappers.MoviesEntityMapper
 import com.mobile.movies.presentation.movies.MoviesViewModel
 import org.koin.android.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
@@ -21,7 +20,7 @@ val repositoryModules = module {
 
 val interactorModules = module {
     factory(name = GET_MOVIES_INTERACTOR) {
-        GetMoviesInteractor(transformer = AsyncFlowableTransformer(), repositories = get())
+        GetMoviesInteractor(repositories = get())
     }
 }
 
@@ -37,9 +36,7 @@ val networkModules = module {
 val viewModelModules = module {
     viewModel {
         MoviesViewModel(
-            getMoviesInteractor = get(GET_MOVIES_INTERACTOR),
-            mapper = MoviesEntityMapper()
-        )
+            getMoviesInteractor = get(GET_MOVIES_INTERACTOR))
     }
 }
 
