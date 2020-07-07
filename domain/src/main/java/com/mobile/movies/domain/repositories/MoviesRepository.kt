@@ -1,8 +1,6 @@
 package com.mobile.movies.domain.repositories
 
-import com.mobile.movies.domain.entities.MoviesData
-import kotlinx.coroutines.Deferred
-import retrofit2.Call
+import com.mobile.movies.domain.model.MoviesData
 import retrofit2.Response
 
 interface MoviesRepository {

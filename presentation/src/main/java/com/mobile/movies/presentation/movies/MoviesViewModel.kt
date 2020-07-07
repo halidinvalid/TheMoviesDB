@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.mobile.movies.domain.entities.MoviesData
 import com.mobile.movies.domain.interactor.GetMoviesInteractor
+import com.mobile.movies.domain.model.MoviesData
 import com.mobile.movies.presentation.common.BaseViewModel
 import com.mobile.movies.presentation.entities.DataHolder
 import com.mobile.movies.presentation.entities.Error

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.mobile.movies.domain.entities.MoviesItemData
+import com.mobile.movies.domain.model.MoviesItemData
 import com.mobile.movies.presentation.R
 import com.mobile.movies.presentation.di.IMAGE_URL
 import com.squareup.picasso.NetworkPolicy

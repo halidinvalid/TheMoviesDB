@@ -1,4 +1,4 @@
-package com.mobile.movies.domain.entities
+package com.mobile.movies.domain.model
 
 import com.google.gson.annotations.SerializedName
 
