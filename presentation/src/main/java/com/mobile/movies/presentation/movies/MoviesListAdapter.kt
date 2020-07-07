@@ -42,9 +42,13 @@ class MoviesListAdapter : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolde
 
     fun updateList(list: MutableList<MoviesItemData>) {
         moviesList.addAll(list)
+
+        val diffResult: DiffUtil.DiffResult =
+            DiffUtil.calculateDiff(MyDiffCallback(moviesListOld, moviesList))
         moviesListOld.clear()
         moviesListOld.addAll(moviesList)
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this@MoviesListAdapter)
+
     }
 
     class MoviesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -114,9 +118,11 @@ class MoviesListAdapter : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolde
                     moviesListOld.addAll(moviesFilter)
                     diffResult.dispatchUpdatesTo(this@MoviesListAdapter)
                 } else {
+                    val diffResult: DiffUtil.DiffResult =
+                        DiffUtil.calculateDiff(MyDiffCallback(moviesListOld, moviesList))
                     moviesListOld.clear()
                     moviesListOld.addAll(moviesList)
-                    notifyDataSetChanged()
+                    diffResult.dispatchUpdatesTo(this@MoviesListAdapter)
                 }
             }
 
