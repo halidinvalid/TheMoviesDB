@@ -6,8 +6,8 @@ data class DataHolder<T>(
     var error: Error? = null
 )
 
-enum class Status {
-    SUCCESSFUL,
-    ERROR,
-    LOADING
+sealed class Status {
+    object SUCCESSFUL : Status()
+    object ERROR : Status()
+    object LOADING : Status()
 }

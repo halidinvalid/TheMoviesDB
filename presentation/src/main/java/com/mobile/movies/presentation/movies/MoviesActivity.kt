@@ -6,8 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import com.mobile.movies.presentation.R
-import com.mobile.movies.presentation.entities.Status
-import com.mobile.movies.presentation.extension.observeApi
+import com.mobile.movies.presentation.extension.observeResponse
 import kotlinx.android.synthetic.main.activity_movies.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -32,24 +31,19 @@ class MoviesActivity : AppCompatActivity() {
             moviesViewModel.getMovies(loadingPage)
         }
 
-        moviesViewModel.moviesLiveData.observeApi(this, { response ->
-            when (response.responseType) {
-                Status.ERROR -> {
-                    Toast.makeText(this, response.error.toString(), Toast.LENGTH_LONG).show()
-                }
-                Status.LOADING -> {
-                    Toast.makeText(this, "Loading", Toast.LENGTH_LONG).show()
-                }
-                Status.SUCCESSFUL -> {
-                    response.data.let { data ->
-                        if (data != null) {
-                            listAdapter.updateList(data.results)
-                        }
-                    }
-                }
+        moviesViewModel.moviesLiveData.observeResponse(
+            owner = this,
+            loading = {
+                Toast.makeText(this, "Loading", Toast.LENGTH_LONG).show()
+            },
+            fail = { error ->
+                Toast.makeText(this, error.toString(), Toast.LENGTH_LONG).show()
+            },
+            success = { moviesData ->
+                listAdapter.updateList(moviesData?.results!!)
             }
+        )
 
-        })
         searchViewMovies.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -63,8 +57,4 @@ class MoviesActivity : AppCompatActivity() {
         })
     }
 
-    override fun onStart() {
-        super.onStart()
-
-    }
 }

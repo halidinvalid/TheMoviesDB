@@ -18,8 +18,8 @@ class MoviesViewModel(
     private val getMoviesInteractor: GetMoviesInteractor
 ) : BaseViewModel() {
 
-    private val _moviesLiveData = MutableLiveData<DataHolder<MoviesData>>()
-    val moviesLiveData: LiveData<DataHolder<MoviesData>>
+    private val _moviesLiveData = MutableLiveData<DataHolder<MoviesData?>>()
+    val moviesLiveData: LiveData<DataHolder<MoviesData?>>
         get() = _moviesLiveData
 
     fun getMovies(
