@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.movies.domain.model.MoviesItemData
 import com.mobile.movies.presentation.R
@@ -19,8 +20,9 @@ import java.util.*
 
 class MoviesListAdapter : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolder>(), Filterable {
 
-    var movies = mutableListOf<MoviesItemData>()
+    var moviesListOld = mutableListOf<MoviesItemData>()
     var moviesFilter = mutableListOf<MoviesItemData>()
+    var moviesList = mutableListOf<MoviesItemData>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
 
@@ -31,16 +33,17 @@ class MoviesListAdapter : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolde
     }
 
     override fun getItemCount(): Int {
-        return moviesFilter.size
+        return moviesListOld.size
     }
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
-        holder.bind(moviesFilter[position])
+        holder.bind(moviesListOld[position])
     }
 
-    fun updateList(list: List<MoviesItemData>) {
-        movies.addAll(list)
-        moviesFilter.addAll(list)
+    fun updateList(list: MutableList<MoviesItemData>) {
+        moviesList.addAll(list)
+        moviesListOld.clear()
+        moviesListOld.addAll(moviesList)
         notifyDataSetChanged()
     }
 
@@ -83,10 +86,10 @@ class MoviesListAdapter : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolde
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val charSearch = constraint.toString()
                 moviesFilter = if (charSearch.isEmpty()) {
-                    movies
+                    moviesListOld
                 } else {
                     val resultList = mutableListOf<MoviesItemData>()
-                    for (row in movies) {
+                    for (row in moviesListOld) {
                         if (row.title?.toLowerCase(Locale.ROOT)
                                 ?.contains(charSearch.toLowerCase(Locale.ROOT))!!
                         ) {
@@ -103,8 +106,18 @@ class MoviesListAdapter : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolde
 
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                moviesFilter = results?.values as MutableList<MoviesItemData>
-                notifyDataSetChanged()
+                if (!constraint.isNullOrEmpty()) {
+                    moviesFilter = results?.values as MutableList<MoviesItemData>
+                    val diffResult: DiffUtil.DiffResult =
+                        DiffUtil.calculateDiff(MyDiffCallback(moviesListOld, moviesFilter))
+                    moviesListOld.clear()
+                    moviesListOld.addAll(moviesFilter)
+                    diffResult.dispatchUpdatesTo(this@MoviesListAdapter)
+                } else {
+                    moviesListOld.clear()
+                    moviesListOld.addAll(moviesList)
+                    notifyDataSetChanged()
+                }
             }
 
         }

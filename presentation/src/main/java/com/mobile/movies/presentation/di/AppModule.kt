@@ -12,9 +12,7 @@ import retrofit2.Retrofit
 val repositoryModules = module {
     single {
         provideMoviesRepository(moviesServices = get())
-
     }
-
 }
 
 val interactorModules = module {
