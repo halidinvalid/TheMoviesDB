@@ -1,12 +1,12 @@
 # Movies Database
 
-# Tech Stack
+## Tech Stack
 
-## Koin
-## MVVM
-## Clean Architecture
-## Retrofit
-## Kotlin
-## Modularization
-## Coroutines
+#### Koin
+#### MVVM
+#### Clean Architecture
+#### Retrofit
+#### Kotlin
+#### Modularization
+#### Coroutines
 
