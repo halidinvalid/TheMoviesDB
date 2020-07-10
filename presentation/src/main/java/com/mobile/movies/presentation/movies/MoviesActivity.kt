@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
-import com.mobile.movies.domain.model.MoviesItemData
 import com.mobile.movies.presentation.R
 import com.mobile.movies.presentation.extension.observeResponse
 import kotlinx.android.synthetic.main.activity_movies.*
@@ -41,7 +40,9 @@ class MoviesActivity : AppCompatActivity() {
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show()
             },
             success = { moviesData ->
-                listAdapter.updateList(moviesData?.results!! as MutableList<MoviesItemData>)
+                moviesData?.results?.let {
+                    listAdapter.updateList(it)
+                }
             }
         )
 
