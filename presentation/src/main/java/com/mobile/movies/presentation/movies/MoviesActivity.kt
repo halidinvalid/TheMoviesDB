@@ -34,8 +34,8 @@ class MoviesActivity : AppCompatActivity() {
 
         moviesViewModel.moviesLiveData.observeResponse(
             owner = this,
-            loading = {
-                Toast.makeText(this, "Loading", Toast.LENGTH_LONG).show()
+            loading = { loading ->
+                Toast.makeText(this, loading, Toast.LENGTH_LONG).show()
             },
             fail = { error ->
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show()
